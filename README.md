@@ -9,39 +9,6 @@
 
 ---
 
-## Архитектура
-
-```mermaid
-flowchart TD
-    subgraph Sources["20+ Открытых источников"]
-        RawLists[TheSpeedX, monosans, clarketm, proxifly, hookzof, ProxyScrape]
-    end
-
-    subgraph Core["Ядро Smart Proxy Pool"]
-        Fetcher[Async Scraper / Fetcher]
-        Validator[Fast Concurrent Checker : 150 workers]
-        Pool[Live Pool Manager & SQLite Storage]
-    end
-
-    subgraph Endpoints["Локальные сервисы"]
-        Rotator["Forward Proxy :8080 (Авто-смена IP)"]
-        API["REST API & Web UI :5010"]
-    end
-
-    subgraph Clients["Клиенты"]
-        Scrapers[Парсеры / Боты / Python / cURL / Браузер]
-    end
-
-    RawLists --> Fetcher
-    Fetcher --> Validator
-    Validator --> Pool
-    Pool --> Rotator
-    Pool --> API
-    Scrapers -->|Каждый запрос через новый IP| Rotator
-    Scrapers -->|Получение списка прокси| API
-```
-
----
 
 ## Возможности
 
