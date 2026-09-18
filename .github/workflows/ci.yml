@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Check syntax and compilation
+      run: |
+        python -m py_compile main.py test_client.py
+        python -m py_compile smart_proxy_pool/__init__.py
+        python -m py_compile smart_proxy_pool/config.py
+        python -m py_compile smart_proxy_pool/fetcher.py
+        python -m py_compile smart_proxy_pool/validator.py
+        python -m py_compile smart_proxy_pool/pool.py
+        python -m py_compile smart_proxy_pool/proxy_server.py
+        python -m py_compile smart_proxy_pool/api_server.py

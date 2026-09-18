@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Smart Proxy Pool ${{ github.ref_name }}
+          body: |
+            ## Smart Proxy Pool ${{ github.ref_name }}
+
+            ### Highlights
+            - **Automated Multi-Source Scraper**: 20+ public lists and API endpoints.
+            - **Concurrent Validator**: High-speed latency and anonymity checks.
+            - **Rotating Forward Proxy (`:8080`)**: Automatic IP rotation on every single outbound request with seamless retry.
+            - **REST API & Web Dashboard (`:5010`)**: Endpoints `/get`, `/all`, `/count`, `/status`.
+            - **Docker & Compose**: Production-ready containerization.
+          draft: false
+          prerelease: false
+          generate_release_notes: true
